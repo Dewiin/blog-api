@@ -14,4 +14,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
 
+  // Relations
+  comments Comment[]
+
+  @@index([id])
+  @@index([username])
+  @@map("users")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+  @@map("comments")
+}
