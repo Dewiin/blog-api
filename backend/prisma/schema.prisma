@@ -14,13 +14,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  AUTHOR
+  USER
+}
+
 model User {
   id       String @id @default(uuid())
   username String @unique
   password String
+  role     Role   @default(USER)
 
   // Relations
   comments Comment[]
+  posts    Post[]
 
   @@index([id])
   @@index([username])
@@ -35,7 +42,26 @@ model Comment {
   // Relations
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
 
   @@index([userId])
   @@map("comments")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(true)
+
+  // Relations
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+  comments Comment[]
+
+  @@index([id])
+  @@map("posts")
 }
