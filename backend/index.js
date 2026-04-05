@@ -30,12 +30,17 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-app.use("/api", indexRouter);
+app.get("/api", (req, res) => {
+    res.json({
+        message: "Welcome to the API."
+    });
+});
+app.use("/api/posts", indexRouter);
 app.use((req, res) => {
 	res.status(404).json({ error: "Not Found" });
 });
 
 // Run
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server running on Port ${PORT}!`));
