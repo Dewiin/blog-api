@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 // routers
 import { indexRouter } from "./routes/indexRouter.js";
+import { authRouter } from "./routes/authRouter.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -36,6 +37,7 @@ app.get("/api", (req, res) => {
     });
 });
 app.use("/api/posts", indexRouter);
+app.use("/api/auth", authRouter);
 app.use((req, res) => {
 	res.status(404).json({ error: "Not Found" });
 });
